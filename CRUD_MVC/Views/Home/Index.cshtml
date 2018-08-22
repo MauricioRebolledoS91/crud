@@ -1,0 +1,64 @@
+﻿@model List<Modelos.vConsultaPersona>
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+}
+
+<h2>Opciones</h2>
+
+@Html.ActionLink("Crear (Create)", "Create", "Persona",
+    null, new { @Class = "btn btn-primary" })
+<hr />
+@Html.ActionLink("Listado (Retrieve)", "Listar", "Persona",
+    null, new { @Class = "btn btn-success" })
+<hr />
+<h2>Reportes</h2>
+@Html.ActionLink("Reporte", "Reporte", "Persona",
+    null, new { @Class = "btn btn-primary", target = "_blank" })
+@Html.ActionLink("Reporte Agrupado", "ReporteAgrupado", "Persona",
+    null, new { @Class = "btn btn-success", target = "_blank" })
+@Html.ActionLink("Reporte Agrupado Colapsado", "ReporteAgrupadoColapsado", "Persona",
+    null, new { @Class = "btn btn-warning", target = "_blank" })
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6 text-left" id="piechart" style="width: 450px; height: 250px;"></div>
+    <div class="col-md-6 text-right" id="piechart2" style="width: 450px; height: 250px;"></div>
+</div>
+
+@section scripts{
+    @*Uso de los gráficos*@
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable(@Html.Action("TiposPersona", "Persona"));
+
+            var options = { title: 'Tipos de Persona' };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
+        }
+    </script>
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable(@Html.Action("EstatusPersona", "Persona"));
+
+            var options = { title: 'Estatus', is3D: true, pieHole: 0.4 };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart2'));
+
+            chart.draw(data, options);
+        }
+    </script>
+}

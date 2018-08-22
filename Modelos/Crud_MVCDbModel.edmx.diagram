@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f9be2d77229e46e7a99c93a215323b45" Name="Diagram1">
+        <EntityTypeShape EntityType="CRUD_MVCModel.Estatu" Width="1.5" PointX="0.75" PointY="5.5" />
+        <EntityTypeShape EntityType="CRUD_MVCModel.Oden_Detalle" Width="1.5" PointX="7.5" PointY="8.75" />
+        <EntityTypeShape EntityType="CRUD_MVCModel.Orden" Width="1.5" PointX="5.25" PointY="5" />
+        <EntityTypeShape EntityType="CRUD_MVCModel.Persona" Width="1.5" PointX="3" PointY="4.875" />
+        <EntityTypeShape EntityType="CRUD_MVCModel.Persona_Tipo" Width="1.5" PointX="0.75" PointY="2.75" />
+        <EntityTypeShape EntityType="CRUD_MVCModel.Producto" Width="1.5" PointX="3" PointY="12.75" />
+        <EntityTypeShape EntityType="CRUD_MVCModel.vConsultaPersona" Width="1.5" PointX="2.75" PointY="0.75" />
+        <AssociationConnector Association="CRUD_MVCModel.FK_Orden_Estatus" />
+        <AssociationConnector Association="CRUD_MVCModel.FK_Persona_Estatus" />
+        <AssociationConnector Association="CRUD_MVCModel.FK_Producto_Estatus" />
+        <AssociationConnector Association="CRUD_MVCModel.FK_Oden_Detalle_Orden" />
+        <AssociationConnector Association="CRUD_MVCModel.FK_Oden_Detalle_Producto" />
+        <AssociationConnector Association="CRUD_MVCModel.FK_Orden_Persona" />
+        <AssociationConnector Association="CRUD_MVCModel.FK_Persona_Persona_Tipo" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

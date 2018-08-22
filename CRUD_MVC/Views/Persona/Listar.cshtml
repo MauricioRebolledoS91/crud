@@ -1,0 +1,148 @@
+﻿@model IEnumerable<Modelos.vConsultaPersona>
+
+@{
+    ViewBag.Title = "Listar";
+}
+
+<h2>Listar</h2>
+
+<p>
+    @Html.ActionLink("Consultar", "ListarSinAjax", "Persona", new { @class = "btn btn-primary" })
+    @Html.ActionLink("Consultar Ajax", "ListarAjax", "Persona", new { @class = "btn btn-success", id = "listarConAjax" })
+</p>
+<table class="table" id="tabla">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Fecha Nacimiento</th>
+            <th>Balance</th>
+            <th>Tipo</th>
+            <th>Estatus</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var persona in Model)
+            {
+            <tr>
+                <td>@persona.Id</td>
+                <td class="edit" id="@persona.Id" data-propertyName="Nombres">@persona.Nombres</td>
+                <td class="edit" id="@persona.Id" data-propertyName="Apellidos">@persona.Apellidos</td>
+                <td class="edit" id="@persona.Id" data-propertyName="Fecha_Nacimiento">@Html.FormatValue(persona.Fecha_Nacimiento, "{0:MM/dd/yyy}")</td>
+                <td class="edit" id="@persona.Id" data-propertyName="Balance">@Html.FormatValue(persona.Balance, "{0:N2}")</td>
+                <td class="editable-select" id="@persona.Id" data-propertyName="Id_Persona_Tipo">@persona.Tipo_Descripcion</td>
+                <td class="editable-select-estatus" id="@persona.Id" data-propertyName="Id_Estatus">@persona.Estatus_Descripcion</td>
+                <td>
+                    @Html.ActionLink("Editar", "Editar", "Persona", new { id = persona.Id }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Borrar", "Borrar", "Persona", new { id = persona.Id }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script src="~/Scripts/jquery.jeditable.min.js"></script>
+    <script>
+        $(function () {
+            $(".table").DataTable();
+            $(".edit").editable("/Persona/Actualizar", {
+                submitdata: function () {
+                    return {
+                        PropertyName: $(this).data("propertyname")
+                    }
+                },
+                //Función para poder recibir el nuevo valor y mostrarlo
+                callback: function (value, settings) {
+                    var jsonData = $.parseJSON(value);
+                    if (jsonData.status) {
+                        $(this).text(jsonData.value);
+                    }
+                    else {
+                        $(this).text(jsonData.mensaje);
+                    }
+                }
+            });
+            $(".editable-select").editable("/Persona/Actualizar", {
+                loadurl: "/Persona/Tipos_PersonaJSON",
+                type: "select",
+                submit: "Ok",
+                cssclass: "form-control",
+                submitcssclass: 'btn btn-success',
+                submitdata: function () {
+                    return { PropertyName: $(this).data("propertyname") };
+                },
+                //Función para poder recibir el nuevo valor y mostrarlo
+                callback: function (value, settings) {
+                    var jsonData = $.parseJSON(value);
+                    if (jsonData.status) {
+                        $(this).text(jsonData.value);
+                    }
+                    else {
+                        $(this).text(jsonData.mensaje);
+                    }
+                }
+            });
+            $(".editable-select-estatus").editable("/Persona/Actualizar", {
+                loadurl: "/Persona/EstatusJSON",
+                type: "select",
+                submit: "Ok",
+                cssclass: "form-control",
+                submitdata: function () {
+                    return { PropertyName: $(this).data("propertyname") };
+                },
+                //Función para poder recibir el nuevo valor y mostrarlo
+                callback: function (value, settings) {
+                    var jsonData = $.parseJSON(value);
+                    if (jsonData.status) {
+                        $(this).text(jsonData.value);
+                    }
+                    else {
+                        $(this).text(jsonData.mensaje);
+                    }
+                }
+            });
+            $("#listarConAjax").click(function (event) {
+                event.preventDefault();
+                var tabla = $("#tabla").DataTable();
+                tabla.destroy();
+                $.ajax({
+                    url: "/Persona/ListarAjax",
+                    success: function (resultado) {
+                        $("#tabla").DataTable({
+                            sort: false,
+                            data: resultado.data,
+                            columns: [
+                                { "data": "Id" },
+                                { "data": "Nombres" },
+                                { "data": "Apellidos" },
+                                {
+                                    "data": "Fecha_Nacimiento", "render": function (data, row, type, meta) {
+                                        if (data != undefined) {
+                                            var milisegundos = parseInt(data.replace("/Date(", "").replace(")/", ""));
+                                            return new Date(milisegundos).toLocaleDateString("en-UE");
+                                        }
+                                        else {
+                                            return data;
+                                        }
+                                    }
+                                },
+                                { "data": "Balance" },
+                                { "data": "Tipo_Descripcion" },
+                                { "data": "Estatus_Descripcion" },
+                                {
+                                    "data": "Id", "render": function (data, row, type, meta) {
+                                        return "<a class='btn btn-warning' href='/Persona/Editar/" + data + "'>Editar</a>" +
+                                            " " + "<a class='btn btn-danger' href='/Persona/Borrar/" + data + "'>Borrar</a>"
+                                    }
+                                }
+                            ]
+                        })
+                    }
+                });
+            });
+        });
+    </script>
+}

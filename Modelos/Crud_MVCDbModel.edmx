@@ -1,0 +1,697 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CRUD_MVCModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Estatus">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Oden_Detalle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Orden" Type="int" Nullable="false" />
+          <Property Name="Id_Producto" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar(max)" Nullable="false" />
+          <Property Name="Cantidad" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Precio" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Impuestos" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Monto" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orden">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Persona" Type="int" />
+          <Property Name="Id_Estatus" Type="tinyint" Nullable="false" />
+          <Property Name="Fecha" Type="date" Nullable="false" />
+          <Property Name="SubTotal" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Impuestos" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Total" Type="numeric" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombres" Type="varchar" MaxLength="100" />
+          <Property Name="Apellidos" Type="varchar" MaxLength="100" />
+          <Property Name="Full_Name" Type="varchar" MaxLength="201" StoreGeneratedPattern="Computed" />
+          <Property Name="Fecha_Nacimiento" Type="date" />
+          <Property Name="Balance" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="Id_Persona_Tipo" Type="int" />
+          <Property Name="Id_Estatus" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="Persona_Tipo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id_Estatus" Type="tinyint" Nullable="false" />
+          <Property Name="Descripcion" Type="varchar(max)" Nullable="false" />
+          <Property Name="Cantidad" Type="numeric" Precision="10" Scale="2" />
+          <Property Name="Costo" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Precio" Type="numeric" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Tasa_Impuesto" Type="numeric" Precision="4" Scale="2" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'CRUD_MVC.dbo.vConsultaPersona' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vConsultaPersona">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Estatus_Descripcion" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Nombres" Type="varchar" MaxLength="100" />
+          <Property Name="Apellidos" Type="varchar" MaxLength="100" />
+          <Property Name="Fecha_Nacimiento" Type="date" />
+          <Property Name="Balance" Type="numeric" Precision="18" Scale="2" />
+          <Property Name="Id_Persona_Tipo" Type="int" />
+          <Property Name="Tipo_Descripcion" Type="varchar" MaxLength="50" />
+          <Property Name="Id_Estatus" Type="tinyint" />
+          <Property Name="Estatus_Descripcion" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Oden_Detalle_Orden">
+          <End Role="Orden" Type="Self.Orden" Multiplicity="1" />
+          <End Role="Oden_Detalle" Type="Self.Oden_Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orden">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Oden_Detalle">
+              <PropertyRef Name="Id_Orden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Oden_Detalle_Producto">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="1" />
+          <End Role="Oden_Detalle" Type="Self.Oden_Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Oden_Detalle">
+              <PropertyRef Name="Id_Producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orden_Estatus">
+          <End Role="Estatus" Type="Self.Estatus" Multiplicity="1" />
+          <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="Id_Estatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orden_Persona">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="0..1" />
+          <End Role="Orden" Type="Self.Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="Id_Persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Persona_Estatus">
+          <End Role="Estatus" Type="Self.Estatus" Multiplicity="0..1" />
+          <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="Id_Estatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Persona_Persona_Tipo">
+          <End Role="Persona_Tipo" Type="Self.Persona_Tipo" Multiplicity="0..1" />
+          <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona_Tipo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="Id_Persona_Tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Producto_Estatus">
+          <End Role="Estatus" Type="Self.Estatus" Multiplicity="1" />
+          <End Role="Producto" Type="Self.Producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Producto">
+              <PropertyRef Name="Id_Estatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fncConsultaPersonaPorId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Id" Type="int" Nullable="false" />
+                <Property Name="Nombres" Type="varchar" MaxLength="100" />
+                <Property Name="Apellidos" Type="varchar" MaxLength="100" />
+                <Property Name="Fecha_Nacimiento" Type="date" />
+                <Property Name="Balance" Type="numeric" Precision="18" Scale="2" />
+                <Property Name="Id_Persona_Tipo" Type="int" />
+                <Property Name="Tipo_Descripcion" Type="varchar" MaxLength="50" />
+                <Property Name="Id_Estatus" Type="tinyint" />
+                <Property Name="Estatus_Descripcion" Type="nchar" MaxLength="10" Nullable="false" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="fncConsultaPersonaPorNombres" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombres" Type="varchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Id" Type="int" Nullable="false" />
+                <Property Name="Nombres" Type="varchar" MaxLength="100" />
+                <Property Name="Apellidos" Type="varchar" MaxLength="100" />
+                <Property Name="Fecha_Nacimiento" Type="date" />
+                <Property Name="Balance" Type="numeric" Precision="18" Scale="2" />
+                <Property Name="Id_Persona_Tipo" Type="int" />
+                <Property Name="Tipo_Descripcion" Type="varchar" MaxLength="50" />
+                <Property Name="Id_Estatus" Type="tinyint" />
+                <Property Name="Estatus_Descripcion" Type="nchar" MaxLength="10" Nullable="false" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="fncConsultaPersonaPorNombresYApellidos" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Nombres" Type="varchar" Mode="In" />
+          <Parameter Name="Apellidos" Type="varchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="Id" Type="int" Nullable="false" />
+                <Property Name="Nombres" Type="varchar" MaxLength="100" />
+                <Property Name="Apellidos" Type="varchar" MaxLength="100" />
+                <Property Name="Fecha_Nacimiento" Type="date" />
+                <Property Name="Balance" Type="numeric" Precision="18" Scale="2" />
+                <Property Name="Id_Persona_Tipo" Type="int" />
+                <Property Name="Tipo_Descripcion" Type="varchar" MaxLength="50" />
+                <Property Name="Id_Estatus" Type="tinyint" />
+                <Property Name="Estatus_Descripcion" Type="nchar" MaxLength="10" Nullable="false" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <EntityContainer Name="CRUD_MVCModelStoreContainer">
+          <EntitySet Name="Estatus" EntityType="Self.Estatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Oden_Detalle" EntityType="Self.Oden_Detalle" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orden" EntityType="Self.Orden" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Persona" EntityType="Self.Persona" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Persona_Tipo" EntityType="Self.Persona_Tipo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Producto" EntityType="Self.Producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vConsultaPersona" EntityType="Self.vConsultaPersona" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vConsultaPersona].[Id] AS [Id], 
+    [vConsultaPersona].[Nombres] AS [Nombres], 
+    [vConsultaPersona].[Apellidos] AS [Apellidos], 
+    [vConsultaPersona].[Fecha_Nacimiento] AS [Fecha_Nacimiento], 
+    [vConsultaPersona].[Balance] AS [Balance], 
+    [vConsultaPersona].[Id_Persona_Tipo] AS [Id_Persona_Tipo], 
+    [vConsultaPersona].[Tipo_Descripcion] AS [Tipo_Descripcion], 
+    [vConsultaPersona].[Id_Estatus] AS [Id_Estatus], 
+    [vConsultaPersona].[Estatus_Descripcion] AS [Estatus_Descripcion]
+    FROM [dbo].[vConsultaPersona] AS [vConsultaPersona]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Oden_Detalle_Orden" Association="Self.FK_Oden_Detalle_Orden">
+            <End Role="Orden" EntitySet="Orden" />
+            <End Role="Oden_Detalle" EntitySet="Oden_Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Oden_Detalle_Producto" Association="Self.FK_Oden_Detalle_Producto">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="Oden_Detalle" EntitySet="Oden_Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orden_Estatus" Association="Self.FK_Orden_Estatus">
+            <End Role="Estatus" EntitySet="Estatus" />
+            <End Role="Orden" EntitySet="Orden" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orden_Persona" Association="Self.FK_Orden_Persona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="Orden" EntitySet="Orden" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Persona_Estatus" Association="Self.FK_Persona_Estatus">
+            <End Role="Estatus" EntitySet="Estatus" />
+            <End Role="Persona" EntitySet="Persona" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Persona_Persona_Tipo" Association="Self.FK_Persona_Persona_Tipo">
+            <End Role="Persona_Tipo" EntitySet="Persona_Tipo" />
+            <End Role="Persona" EntitySet="Persona" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Producto_Estatus" Association="Self.FK_Producto_Estatus">
+            <End Role="Estatus" EntitySet="Estatus" />
+            <End Role="Producto" EntitySet="Producto" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CRUD_MVCModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="fncConsultaPersonaPorId_Result">
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Nombres" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Apellidos" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Nacimiento" Type="DateTime" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Id_Persona_Tipo" Type="Int32" />
+          <Property Name="Tipo_Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Id_Estatus" Type="Byte" />
+          <Property Name="Estatus_Descripcion" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="fncConsultaPersonaPorNombres_Result">
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Nombres" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Apellidos" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Nacimiento" Type="DateTime" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Id_Persona_Tipo" Type="Int32" />
+          <Property Name="Tipo_Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Id_Estatus" Type="Byte" />
+          <Property Name="Estatus_Descripcion" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="fncConsultaPersonaPorNombresYApellidos_Result">
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Nombres" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Apellidos" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Nacimiento" Type="DateTime" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Id_Persona_Tipo" Type="Int32" />
+          <Property Name="Tipo_Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Id_Estatus" Type="Byte" />
+          <Property Name="Estatus_Descripcion" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+        </ComplexType>
+        <EntityContainer Name="CRUD_MVCEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="fncConsultaPersonaPorId" IsComposable="true" ReturnType="Collection(CRUD_MVCModel.fncConsultaPersonaPorId_Result)">
+          <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="fncConsultaPersonaPorNombres" IsComposable="true" ReturnType="Collection(CRUD_MVCModel.fncConsultaPersonaPorNombres_Result)">
+          <Parameter Name="Nombres" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="fncConsultaPersonaPorNombresYApellidos" IsComposable="true" ReturnType="Collection(CRUD_MVCModel.fncConsultaPersonaPorNombresYApellidos_Result)">
+            <Parameter Name="Nombres" Mode="In" Type="String" />
+            <Parameter Name="Apellidos" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Estatus" EntityType="CRUD_MVCModel.Estatu" />
+          <EntitySet Name="Oden_Detalle" EntityType="CRUD_MVCModel.Oden_Detalle" />
+          <EntitySet Name="Ordens" EntityType="CRUD_MVCModel.Orden" />
+          <EntitySet Name="Personas" EntityType="CRUD_MVCModel.Persona" />
+          <EntitySet Name="Persona_Tipo" EntityType="CRUD_MVCModel.Persona_Tipo" />
+          <EntitySet Name="Productoes" EntityType="CRUD_MVCModel.Producto" />
+          <EntitySet Name="vConsultaPersonas" EntityType="CRUD_MVCModel.vConsultaPersona" />
+          <AssociationSet Name="FK_Orden_Estatus" Association="CRUD_MVCModel.FK_Orden_Estatus">
+            <End Role="Estatu" EntitySet="Estatus" />
+            <End Role="Orden" EntitySet="Ordens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Persona_Estatus" Association="CRUD_MVCModel.FK_Persona_Estatus">
+            <End Role="Estatu" EntitySet="Estatus" />
+            <End Role="Persona" EntitySet="Personas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Producto_Estatus" Association="CRUD_MVCModel.FK_Producto_Estatus">
+            <End Role="Estatu" EntitySet="Estatus" />
+            <End Role="Producto" EntitySet="Productoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Oden_Detalle_Orden" Association="CRUD_MVCModel.FK_Oden_Detalle_Orden">
+            <End Role="Orden" EntitySet="Ordens" />
+            <End Role="Oden_Detalle" EntitySet="Oden_Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Oden_Detalle_Producto" Association="CRUD_MVCModel.FK_Oden_Detalle_Producto">
+            <End Role="Producto" EntitySet="Productoes" />
+            <End Role="Oden_Detalle" EntitySet="Oden_Detalle" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orden_Persona" Association="CRUD_MVCModel.FK_Orden_Persona">
+            <End Role="Persona" EntitySet="Personas" />
+            <End Role="Orden" EntitySet="Ordens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Persona_Persona_Tipo" Association="CRUD_MVCModel.FK_Persona_Persona_Tipo">
+            <End Role="Persona_Tipo" EntitySet="Persona_Tipo" />
+            <End Role="Persona" EntitySet="Personas" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Estatu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Ordens" Relationship="CRUD_MVCModel.FK_Orden_Estatus" FromRole="Estatu" ToRole="Orden" />
+          <NavigationProperty Name="Personas" Relationship="CRUD_MVCModel.FK_Persona_Estatus" FromRole="Estatu" ToRole="Persona" />
+          <NavigationProperty Name="Productoes" Relationship="CRUD_MVCModel.FK_Producto_Estatus" FromRole="Estatu" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="Oden_Detalle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Orden" Type="Int32" Nullable="false" />
+          <Property Name="Id_Producto" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Cantidad" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Precio" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Impuestos" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Monto" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="Orden" Relationship="CRUD_MVCModel.FK_Oden_Detalle_Orden" FromRole="Oden_Detalle" ToRole="Orden" />
+          <NavigationProperty Name="Producto" Relationship="CRUD_MVCModel.FK_Oden_Detalle_Producto" FromRole="Oden_Detalle" ToRole="Producto" />
+        </EntityType>
+        <EntityType Name="Orden">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Persona" Type="Int32" />
+          <Property Name="Id_Estatus" Type="Byte" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="SubTotal" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Impuestos" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Total" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <NavigationProperty Name="Estatu" Relationship="CRUD_MVCModel.FK_Orden_Estatus" FromRole="Orden" ToRole="Estatu" />
+          <NavigationProperty Name="Oden_Detalle" Relationship="CRUD_MVCModel.FK_Oden_Detalle_Orden" FromRole="Orden" ToRole="Oden_Detalle" />
+          <NavigationProperty Name="Persona" Relationship="CRUD_MVCModel.FK_Orden_Persona" FromRole="Orden" ToRole="Persona" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombres" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Apellidos" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Full_Name" Type="String" MaxLength="201" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Fecha_Nacimiento" Type="DateTime" Precision="0" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Id_Persona_Tipo" Type="Int32" />
+          <Property Name="Id_Estatus" Type="Byte" />
+          <NavigationProperty Name="Estatu" Relationship="CRUD_MVCModel.FK_Persona_Estatus" FromRole="Persona" ToRole="Estatu" />
+          <NavigationProperty Name="Ordens" Relationship="CRUD_MVCModel.FK_Orden_Persona" FromRole="Persona" ToRole="Orden" />
+          <NavigationProperty Name="Persona_Tipo" Relationship="CRUD_MVCModel.FK_Persona_Persona_Tipo" FromRole="Persona" ToRole="Persona_Tipo" />
+        </EntityType>
+        <EntityType Name="Persona_Tipo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Personas" Relationship="CRUD_MVCModel.FK_Persona_Persona_Tipo" FromRole="Persona_Tipo" ToRole="Persona" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id_Estatus" Type="Byte" Nullable="false" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Cantidad" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Costo" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Precio" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+          <Property Name="Tasa_Impuesto" Type="Decimal" Nullable="false" Precision="4" Scale="2" />
+          <NavigationProperty Name="Estatu" Relationship="CRUD_MVCModel.FK_Producto_Estatus" FromRole="Producto" ToRole="Estatu" />
+          <NavigationProperty Name="Oden_Detalle" Relationship="CRUD_MVCModel.FK_Oden_Detalle_Producto" FromRole="Producto" ToRole="Oden_Detalle" />
+        </EntityType>
+        <EntityType Name="vConsultaPersona">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Estatus_Descripcion" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Nombres" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Apellidos" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Fecha_Nacimiento" Type="DateTime" Precision="0" />
+          <Property Name="Balance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Id_Persona_Tipo" Type="Int32" />
+          <Property Name="Tipo_Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Id_Estatus" Type="Byte" />
+          <Property Name="Estatus_Descripcion" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Orden_Estatus">
+          <End Type="CRUD_MVCModel.Estatu" Role="Estatu" Multiplicity="1" />
+          <End Type="CRUD_MVCModel.Orden" Role="Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="Id_Estatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Persona_Estatus">
+          <End Type="CRUD_MVCModel.Estatu" Role="Estatu" Multiplicity="0..1" />
+          <End Type="CRUD_MVCModel.Persona" Role="Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="Id_Estatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Producto_Estatus">
+          <End Type="CRUD_MVCModel.Estatu" Role="Estatu" Multiplicity="1" />
+          <End Type="CRUD_MVCModel.Producto" Role="Producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Producto">
+              <PropertyRef Name="Id_Estatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Oden_Detalle_Orden">
+          <End Type="CRUD_MVCModel.Orden" Role="Orden" Multiplicity="1" />
+          <End Type="CRUD_MVCModel.Oden_Detalle" Role="Oden_Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orden">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Oden_Detalle">
+              <PropertyRef Name="Id_Orden" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Oden_Detalle_Producto">
+          <End Type="CRUD_MVCModel.Producto" Role="Producto" Multiplicity="1" />
+          <End Type="CRUD_MVCModel.Oden_Detalle" Role="Oden_Detalle" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Oden_Detalle">
+              <PropertyRef Name="Id_Producto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orden_Persona">
+          <End Type="CRUD_MVCModel.Persona" Role="Persona" Multiplicity="0..1" />
+          <End Type="CRUD_MVCModel.Orden" Role="Orden" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orden">
+              <PropertyRef Name="Id_Persona" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Persona_Persona_Tipo">
+          <End Type="CRUD_MVCModel.Persona_Tipo" Role="Persona_Tipo" Multiplicity="0..1" />
+          <End Type="CRUD_MVCModel.Persona" Role="Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona_Tipo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="Id_Persona_Tipo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CRUD_MVCModelStoreContainer" CdmEntityContainer="CRUD_MVCEntities">
+          <FunctionImportMapping FunctionName="CRUD_MVCModel.Store.fncConsultaPersonaPorId" FunctionImportName="fncConsultaPersonaPorId">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CRUD_MVCModel.fncConsultaPersonaPorId_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Fecha_Nacimiento" ColumnName="Fecha_Nacimiento" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Id_Persona_Tipo" ColumnName="Id_Persona_Tipo" />
+                <ScalarProperty Name="Tipo_Descripcion" ColumnName="Tipo_Descripcion" />
+                <ScalarProperty Name="Id_Estatus" ColumnName="Id_Estatus" />
+                <ScalarProperty Name="Estatus_Descripcion" ColumnName="Estatus_Descripcion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionName="CRUD_MVCModel.Store.fncConsultaPersonaPorNombres" FunctionImportName="fncConsultaPersonaPorNombres">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CRUD_MVCModel.fncConsultaPersonaPorNombres_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Fecha_Nacimiento" ColumnName="Fecha_Nacimiento" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Id_Persona_Tipo" ColumnName="Id_Persona_Tipo" />
+                <ScalarProperty Name="Tipo_Descripcion" ColumnName="Tipo_Descripcion" />
+                <ScalarProperty Name="Id_Estatus" ColumnName="Id_Estatus" />
+                <ScalarProperty Name="Estatus_Descripcion" ColumnName="Estatus_Descripcion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionName="CRUD_MVCModel.Store.fncConsultaPersonaPorNombresYApellidos" FunctionImportName="fncConsultaPersonaPorNombresYApellidos">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="CRUD_MVCModel.fncConsultaPersonaPorNombresYApellidos_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Fecha_Nacimiento" ColumnName="Fecha_Nacimiento" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Id_Persona_Tipo" ColumnName="Id_Persona_Tipo" />
+                <ScalarProperty Name="Tipo_Descripcion" ColumnName="Tipo_Descripcion" />
+                <ScalarProperty Name="Id_Estatus" ColumnName="Id_Estatus" />
+                <ScalarProperty Name="Estatus_Descripcion" ColumnName="Estatus_Descripcion" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Estatus">
+            <EntityTypeMapping TypeName="CRUD_MVCModel.Estatu">
+              <MappingFragment StoreEntitySet="Estatus">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Oden_Detalle">
+            <EntityTypeMapping TypeName="CRUD_MVCModel.Oden_Detalle">
+              <MappingFragment StoreEntitySet="Oden_Detalle">
+                <ScalarProperty Name="Monto" ColumnName="Monto" />
+                <ScalarProperty Name="Impuestos" ColumnName="Impuestos" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Id_Producto" ColumnName="Id_Producto" />
+                <ScalarProperty Name="Id_Orden" ColumnName="Id_Orden" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ordens">
+            <EntityTypeMapping TypeName="CRUD_MVCModel.Orden">
+              <MappingFragment StoreEntitySet="Orden">
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Impuestos" ColumnName="Impuestos" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="Id_Estatus" ColumnName="Id_Estatus" />
+                <ScalarProperty Name="Id_Persona" ColumnName="Id_Persona" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Personas">
+            <EntityTypeMapping TypeName="CRUD_MVCModel.Persona">
+              <MappingFragment StoreEntitySet="Persona">
+                <ScalarProperty Name="Id_Estatus" ColumnName="Id_Estatus" />
+                <ScalarProperty Name="Id_Persona_Tipo" ColumnName="Id_Persona_Tipo" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Fecha_Nacimiento" ColumnName="Fecha_Nacimiento" />
+                <ScalarProperty Name="Full_Name" ColumnName="Full_Name" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Persona_Tipo">
+            <EntityTypeMapping TypeName="CRUD_MVCModel.Persona_Tipo">
+              <MappingFragment StoreEntitySet="Persona_Tipo">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Productoes">
+            <EntityTypeMapping TypeName="CRUD_MVCModel.Producto">
+              <MappingFragment StoreEntitySet="Producto">
+                <ScalarProperty Name="Tasa_Impuesto" ColumnName="Tasa_Impuesto" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Costo" ColumnName="Costo" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Id_Estatus" ColumnName="Id_Estatus" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vConsultaPersonas">
+            <EntityTypeMapping TypeName="CRUD_MVCModel.vConsultaPersona">
+              <MappingFragment StoreEntitySet="vConsultaPersona">
+                <ScalarProperty Name="Estatus_Descripcion" ColumnName="Estatus_Descripcion" />
+                <ScalarProperty Name="Id_Estatus" ColumnName="Id_Estatus" />
+                <ScalarProperty Name="Tipo_Descripcion" ColumnName="Tipo_Descripcion" />
+                <ScalarProperty Name="Id_Persona_Tipo" ColumnName="Id_Persona_Tipo" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Fecha_Nacimiento" ColumnName="Fecha_Nacimiento" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

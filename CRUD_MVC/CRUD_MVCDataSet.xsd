@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CRUD_MVCDataSet" targetNamespace="http://tempuri.org/CRUD_MVCDataSet.xsd" xmlns:mstns="http://tempuri.org/CRUD_MVCDataSet.xsd" xmlns="http://tempuri.org/CRUD_MVCDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="CRUD_MVCConnectionString" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="CRUD_MVCConnectionString (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.CRUD_MVCConnectionString.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="vConsultaPersonaTableAdapter" GeneratorDataComponentClassName="vConsultaPersonaTableAdapter" Name="vConsultaPersona" UserDataComponentName="vConsultaPersonaTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="CRUD_MVCConnectionString (Web.config)" DbObjectName="CRUD_MVC.dbo.vConsultaPersona" DbObjectType="View" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="false" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="false">
+                    <CommandText>SELECT Id, Nombres, Apellidos, Fecha_Nacimiento, Balance, Id_Persona_Tipo, Tipo_Descripcion, Id_Estatus, Estatus_Descripcion FROM dbo.vConsultaPersona</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="Id" DataSetColumn="Id" />
+              <Mapping SourceColumn="Nombres" DataSetColumn="Nombres" />
+              <Mapping SourceColumn="Apellidos" DataSetColumn="Apellidos" />
+              <Mapping SourceColumn="Fecha_Nacimiento" DataSetColumn="Fecha_Nacimiento" />
+              <Mapping SourceColumn="Balance" DataSetColumn="Balance" />
+              <Mapping SourceColumn="Id_Persona_Tipo" DataSetColumn="Id_Persona_Tipo" />
+              <Mapping SourceColumn="Tipo_Descripcion" DataSetColumn="Tipo_Descripcion" />
+              <Mapping SourceColumn="Id_Estatus" DataSetColumn="Id_Estatus" />
+              <Mapping SourceColumn="Estatus_Descripcion" DataSetColumn="Estatus_Descripcion" />
+            </Mappings>
+            <Sources />
+          </TableAdapter>
+        </Tables>
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="CRUD_MVCDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="CRUD_MVCDataSet" msprop:Generator_UserDSName="CRUD_MVCDataSet">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="vConsultaPersona" msprop:Generator_TableClassName="vConsultaPersonaDataTable" msprop:Generator_TableVarName="tablevConsultaPersona" msprop:Generator_TablePropName="vConsultaPersona" msprop:Generator_RowDeletingName="vConsultaPersonaRowDeleting" msprop:Generator_RowChangingName="vConsultaPersonaRowChanging" msprop:Generator_RowEvHandlerName="vConsultaPersonaRowChangeEventHandler" msprop:Generator_RowDeletedName="vConsultaPersonaRowDeleted" msprop:Generator_UserTableName="vConsultaPersona" msprop:Generator_RowChangedName="vConsultaPersonaRowChanged" msprop:Generator_RowEvArgName="vConsultaPersonaRowChangeEvent" msprop:Generator_RowClassName="vConsultaPersonaRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Id" msprop:Generator_ColumnVarNameInTable="columnId" msprop:Generator_ColumnPropNameInRow="Id" msprop:Generator_ColumnPropNameInTable="IdColumn" msprop:Generator_UserColumnName="Id" type="xs:int" />
+              <xs:element name="Nombres" msprop:Generator_ColumnVarNameInTable="columnNombres" msprop:Generator_ColumnPropNameInRow="Nombres" msprop:Generator_ColumnPropNameInTable="NombresColumn" msprop:Generator_UserColumnName="Nombres" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Apellidos" msprop:Generator_ColumnVarNameInTable="columnApellidos" msprop:Generator_ColumnPropNameInRow="Apellidos" msprop:Generator_ColumnPropNameInTable="ApellidosColumn" msprop:Generator_UserColumnName="Apellidos" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="100" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Fecha_Nacimiento" msprop:Generator_ColumnVarNameInTable="columnFecha_Nacimiento" msprop:Generator_ColumnPropNameInRow="Fecha_Nacimiento" msprop:Generator_ColumnPropNameInTable="Fecha_NacimientoColumn" msprop:Generator_UserColumnName="Fecha_Nacimiento" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Balance" msprop:Generator_ColumnVarNameInTable="columnBalance" msprop:Generator_ColumnPropNameInRow="Balance" msprop:Generator_ColumnPropNameInTable="BalanceColumn" msprop:Generator_UserColumnName="Balance" type="xs:decimal" minOccurs="0" />
+              <xs:element name="Id_Persona_Tipo" msprop:Generator_ColumnVarNameInTable="columnId_Persona_Tipo" msprop:Generator_ColumnPropNameInRow="Id_Persona_Tipo" msprop:Generator_ColumnPropNameInTable="Id_Persona_TipoColumn" msprop:Generator_UserColumnName="Id_Persona_Tipo" type="xs:int" minOccurs="0" />
+              <xs:element name="Tipo_Descripcion" msprop:Generator_ColumnVarNameInTable="columnTipo_Descripcion" msprop:Generator_ColumnPropNameInRow="Tipo_Descripcion" msprop:Generator_ColumnPropNameInTable="Tipo_DescripcionColumn" msprop:Generator_UserColumnName="Tipo_Descripcion" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Id_Estatus" msprop:Generator_ColumnVarNameInTable="columnId_Estatus" msprop:Generator_ColumnPropNameInRow="Id_Estatus" msprop:Generator_ColumnPropNameInTable="Id_EstatusColumn" msprop:Generator_UserColumnName="Id_Estatus" type="xs:unsignedByte" minOccurs="0" />
+              <xs:element name="Estatus_Descripcion" msprop:Generator_ColumnVarNameInTable="columnEstatus_Descripcion" msprop:Generator_ColumnPropNameInRow="Estatus_Descripcion" msprop:Generator_ColumnPropNameInTable="Estatus_DescripcionColumn" msprop:Generator_UserColumnName="Estatus_Descripcion">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="10" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:vConsultaPersona" />
+      <xs:field xpath="mstns:Id" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>
